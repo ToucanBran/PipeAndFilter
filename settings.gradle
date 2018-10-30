@@ -1,2 +1,4 @@
 include 'pipe-and-filter-app'
+include 'pipe-and-filter-app:library'
+findProject(':pipe-and-filter-app:library')?.name = 'library'
 
