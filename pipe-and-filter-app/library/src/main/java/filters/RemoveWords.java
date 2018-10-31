@@ -10,7 +10,7 @@ public class RemoveWords extends Filter<List<String>, List<String>> {
 
     public RemoveWords(Pipe<List<String>> inputPipe,
                        Pipe<List<String>> outputPipe) {
-        super(inputPipe, outputPipe);
+        this(inputPipe, outputPipe, null);
     }
     public RemoveWords(Pipe<List<String>> inputPipe,
                        Pipe<List<String>> outputPipe,
