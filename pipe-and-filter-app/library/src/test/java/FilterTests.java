@@ -157,8 +157,8 @@ public class FilterTests {
             }
         };
 
-        Filter<List<Object>, HashMap<Object, Integer>> frequencyFilter = new Frequency(mock(Pipe.class), mock(Pipe.class));
-        HashMap<Object, Integer> output = frequencyFilter.process(words);
+        Filter<List<Object>, Map<Object, Integer>> frequencyFilter = new Frequency(mock(Pipe.class), mock(Pipe.class));
+        Map<Object, Integer> output = frequencyFilter.process(words);
         Assert.assertTrue(output.size() == 1 && output.get("jump") == 4);
     }
 
@@ -180,10 +180,73 @@ public class FilterTests {
             }
         };
 
-        Filter<List<Object>, HashMap<Object, Integer>> frequencyFilter = new Frequency(mock(Pipe.class), mock(Pipe.class));
-        HashMap<Object, Integer> output = frequencyFilter.process(words);
+        Filter<List<Object>, Map<Object, Integer>> frequencyFilter = new Frequency(mock(Pipe.class), mock(Pipe.class));
+        Map<Object, Integer> output = frequencyFilter.process(words);
         Assert.assertTrue(output.size() == 4 && output.get("jump") == 2
                             && output.get(1) == 2 && output.get(setOne) == 2
                             && output.get(setTwo) == 1);
+    }
+
+    @Test(timeout=1000)
+    public void frequency_stressTest_success() {
+        Set setOne = new HashSet();
+        setOne.add("test");
+        List<Object> words = new ArrayList<Object>();
+        for (int i = 0; i < 100000; i++) {
+            words.add("jump");
+            words.add(1);
+            words.add(setOne);
+        }
+
+        Filter<List<Object>, Map<Object, Integer>> frequencyFilter = new Frequency(mock(Pipe.class), mock(Pipe.class));
+        frequencyFilter.process(words);
+    }
+
+    @Test
+    public void mostFrequent_defaultLimit_success() {
+        HashMap<String, Integer> frequency = new HashMap<>();
+        frequency.put("Hello", 10);
+        frequency.put("Foo", 13);
+        frequency.put("Bar", 13);
+        frequency.put("jumps", 11);
+        frequency.put("jumping",22);
+        frequency.put("jumped", 6);
+        frequency.put("jump", 2);
+        frequency.put("world", 1);
+        frequency.put("I",32);
+        frequency.put("am", 40);
+        frequency.put("testing", 12);
+
+        String[] expectedOrder = new String[]{"am", "I", "jumping", "Bar", "Foo", "testing",
+                "jumps", "Hello","jumped", "jump"};
+        Filter<Map<String, Integer>, List<String>> mostFrequentWordsFilter = new MostFrequent(mock(Pipe.class), mock(Pipe.class));
+
+        String[] output = mostFrequentWordsFilter.process(frequency).toArray(new String[0]);
+        Assert.assertTrue(output.length == expectedOrder.length);
+        for (int i = 0; i < output.length; i++) {
+            Assert.assertTrue(output[i].equals(expectedOrder[i]));
+        }
+    }
+
+    @Test
+    public void mostFrequent_customLimit_success() {
+        HashMap<String, Integer> frequency = new HashMap<>();
+        frequency.put("Hello", 10);
+        frequency.put("Foo", 13);
+        frequency.put("Bar", 13);
+        frequency.put("jumps", 11);
+        frequency.put("jumping",22);
+        frequency.put("jumped", 6);
+        frequency.put("jump", 2);
+        frequency.put("world", 1);
+        frequency.put("I",32);
+        frequency.put("am", 40);
+        frequency.put("testing", 12);
+
+        Filter<Map<String, Integer>, List<String>> mostFrequentWordsFilter =
+                        new MostFrequent(mock(Pipe.class), mock(Pipe.class), 11);
+
+        String[] output = mostFrequentWordsFilter.process(frequency).toArray(new String[0]);
+        Assert.assertTrue(output.length == 11);
     }
 }

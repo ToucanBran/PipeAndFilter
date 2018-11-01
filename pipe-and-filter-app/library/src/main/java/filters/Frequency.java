@@ -1,20 +1,22 @@
 package filters;
 
+import common.MapUtil;
 import pipes.Pipe;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class Frequency extends Filter<List<Object>, HashMap<Object, Integer>> {
+public class Frequency<T> extends Filter<List<T>, Map<T, Integer>> {
 
-    public Frequency(Pipe<List<Object>> inputPipe,
-                     Pipe<HashMap<Object, Integer>> outputPipe) {
+    public Frequency(Pipe<List<T>> inputPipe,
+                     Pipe<Map<T, Integer>> outputPipe) {
         super(inputPipe, outputPipe);
     }
 
     @Override
-    public HashMap<Object, Integer> process(List<Object> input) {
-        HashMap<Object, Integer> output = new HashMap<>();
+    public Map<T, Integer> process(List<T> input) {
+        HashMap<T, Integer> output = new HashMap<>();
         if (input != null) {
             input.forEach(item -> {
                 if (output.containsKey(item)) {
@@ -25,6 +27,7 @@ public class Frequency extends Filter<List<Object>, HashMap<Object, Integer>> {
                 }
             });
         }
+
         return output;
     }
 
