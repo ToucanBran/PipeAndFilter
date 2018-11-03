@@ -5,12 +5,14 @@ import services.PipeAndFilter;
 import javax.annotation.processing.FilerException;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
 public class PipeAndFilterMain {
     private static PipeAndFilter pipeAndFilter;
+    private static Pipe startPipe;
     public static void main(String[] args) {
         pipeAndFilter = setupPipeAndFilter();
         System.out.println("Pipe and Filter Main Demo");
@@ -33,21 +35,20 @@ public class PipeAndFilterMain {
             }
             else if (input.equals("q")) {
                 pipeAndFilter.stopPipeline();
+                System.exit(0);
             }
         }
     }
 
     private static PipeAndFilter setupPipeAndFilter() {
-        File stopWordsFile = new File(PipeAndFilterMain.class.getClassLoader()
-                .getResource("stopWords.txt")
-                .getFile());
+        InputStream stopWordsStream = PipeAndFilterMain.class.getResourceAsStream("/stopwords.txt");
         List<String> stopWords = new ArrayList<>();
         try {
-            Scanner scanner = new Scanner(stopWordsFile);
+            Scanner scanner = new Scanner(stopWordsStream);
             while (scanner.hasNext()) {
                 stopWords.add(scanner.next());
             }
-        } catch (FileNotFoundException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
         Filter[] filters = new Filter[]{
@@ -63,18 +64,20 @@ public class PipeAndFilterMain {
     private static void startPipeline(String option)
     {
         ClassLoader classLoader = PipeAndFilterMain.class.getClassLoader();
-        Pipe startPipe = pipeAndFilter.startPipeline();
-        File book = null;
+        if (startPipe == null) {
+            startPipe = pipeAndFilter.startPipeline();
+        }
+        InputStream book = null;
         final String ALICE = "1", KJV = "2", US_DECLARATION = "3";
         switch (option) {
             case ALICE:
-                book = new File(classLoader.getResource("alice30.txt").getFile());
+                book = PipeAndFilterMain.class.getResourceAsStream("/alice30.txt");
                 break;
             case KJV:
-                book = new File(classLoader.getResource("kjbible.txt").getFile());
+                book = PipeAndFilterMain.class.getResourceAsStream("/kjbible.txt");
                 break;
             case US_DECLARATION:
-                book = new File(classLoader.getResource("usdeclar.txt").getFile());
+                book = PipeAndFilterMain.class.getResourceAsStream("/usdeclar.txt");
                 break;
         }
         if (book != null) {
@@ -89,7 +92,7 @@ public class PipeAndFilterMain {
         }
     }
     // Given a file, all strings are added to a list and returned to the caller
-    private static List<String> getWords(File file) {
+    private static List<String> getWords(InputStream file) {
         if (file == null) {
             return null;
         }
@@ -100,7 +103,7 @@ public class PipeAndFilterMain {
                 output.add(scanner.next().toLowerCase());
             }
         }
-        catch (FileNotFoundException e) {
+        catch (Exception e) {
             System.out.println("Something went wrong when searching for the book. Rerun the program to try again.");
             System.exit(1);
         }

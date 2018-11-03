@@ -1,5 +1,6 @@
 plugins {
     id 'java'
+    id "com.github.onslip.gradle-one-jar" version "1.0.5"
 }
 
 version 'unspecified'
@@ -10,6 +11,22 @@ repositories {
     mavenCentral()
 }
 
+configurations {
+    oneJarLib
+}
+
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
+    compile project(':pipe-and-filter-app:library')
+    oneJarLib files('src/main/resources/stopwords.txt')
+}
+
+task awesomeFunJar(type: OneJar) {
+    mainClass = 'PipeAndFilterMain'
+}
+
+
+task createFatJar(type: OneJar) {
+    mainClass = 'PipeAndFilterMain'
+    archiveName = 'myawesomeapp-all.jar'
 }
