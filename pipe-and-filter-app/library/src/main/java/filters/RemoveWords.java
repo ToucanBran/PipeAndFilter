@@ -13,6 +13,7 @@ public class RemoveWords extends Filter<List<String>, List<String>> {
         super();
         this.stopWords = null;
     }
+
     public RemoveWords(Pipe<List<String>> outputPipe) {
         this(outputPipe, null);
     }

@@ -15,6 +15,9 @@ public class MostFrequent extends Filter<Map<String, Integer>, List<String>> {
     public MostFrequent() {
         super();
     }
+    public MostFrequent(int limit) {
+        this.limit = limit;
+    }
     public MostFrequent(Pipe<List<String>> outputPipe) {
         super(outputPipe);
 
