@@ -2,15 +2,15 @@ package filters;
 
 import pipes.Pipe;
 
-import java.util.List;
-
 public abstract class Filter<T, K> implements Runnable{
 
     private Pipe<T> inputPipe;
     private Pipe<K> outputPipe;
-    public Filter(Pipe<T> inputPipe, Pipe<K> outputPipe) {
+    public Filter() {
+        this(new Pipe<K>());
+    }
+    public Filter(Pipe<K> outputPipe) {
         this.outputPipe = outputPipe;
-        this.inputPipe = inputPipe;
     }
 
     public abstract K process(T input);
@@ -23,6 +23,12 @@ public abstract class Filter<T, K> implements Runnable{
         return outputPipe;
     }
 
+    public void setInputPipe(Pipe<T> pipe) {
+        this.inputPipe = pipe;
+    }
+    public void setOutputPipe(Pipe<K> pipe) {
+        this.outputPipe = pipe;
+    }
     @Override
     public void run() {
         while (true) {
@@ -32,5 +38,10 @@ public abstract class Filter<T, K> implements Runnable{
                 outputPipe.write(transformedInput);
             }
         }
+    }
+
+    public <B> Filter pipeTo(Filter<K, B> nextFilter) {
+        nextFilter.setInputPipe(outputPipe);
+        return nextFilter;
     }
 }

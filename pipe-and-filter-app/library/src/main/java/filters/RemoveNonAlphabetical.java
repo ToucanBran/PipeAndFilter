@@ -7,9 +7,11 @@ import java.util.List;
 
 public class RemoveNonAlphabetical extends Filter<List<String>, List<String>> {
 
-    public RemoveNonAlphabetical(Pipe<List<String>> inputPipe,
-                       Pipe<List<String>> outputPipe) {
-        super(inputPipe, outputPipe);
+    public RemoveNonAlphabetical() {
+        super();
+    }
+    public RemoveNonAlphabetical(Pipe<List<String>> outputPipe) {
+        super(outputPipe);
     }
     @Override
     public List<String> process(List<String> input) {

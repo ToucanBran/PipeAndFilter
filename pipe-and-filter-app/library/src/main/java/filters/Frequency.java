@@ -1,6 +1,5 @@
 package filters;
 
-import common.MapUtil;
 import pipes.Pipe;
 
 import java.util.HashMap;
@@ -9,9 +8,11 @@ import java.util.Map;
 
 public class Frequency<T> extends Filter<List<T>, Map<T, Integer>> {
 
-    public Frequency(Pipe<List<T>> inputPipe,
-                     Pipe<Map<T, Integer>> outputPipe) {
-        super(inputPipe, outputPipe);
+    public Frequency() {
+        super();
+    }
+    public Frequency(Pipe<Map<T, Integer>> outputPipe) {
+        super(outputPipe);
     }
 
     @Override

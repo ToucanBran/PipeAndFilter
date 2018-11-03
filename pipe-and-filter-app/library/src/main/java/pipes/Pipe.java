@@ -2,7 +2,7 @@ package pipes;
 
 import java.util.concurrent.LinkedBlockingQueue;
 
-public abstract class Pipe<T> {
+public class Pipe<T> {
 
     private LinkedBlockingQueue<T> queue = new LinkedBlockingQueue<>();
 

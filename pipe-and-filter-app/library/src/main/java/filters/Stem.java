@@ -10,9 +10,12 @@ import java.util.stream.Collectors;
 public class Stem extends Filter<List<String>, List<String>> {
 
     private Stemmer stemmer;
-    public Stem(Pipe<List<String>> inputPipe,
-                Pipe<List<String>> outputPipe) {
-        super(inputPipe, outputPipe);
+    public Stem() {
+        super();
+        stemmer = new Stemmer();
+    }
+    public Stem(Pipe<List<String>> outputPipe) {
+        super(outputPipe);
         stemmer = new Stemmer();
     }
 

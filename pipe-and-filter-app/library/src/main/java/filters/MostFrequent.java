@@ -12,16 +12,16 @@ public class MostFrequent extends Filter<Map<String, Integer>, List<String>> {
     private static final int DEFAULT_LIMIT = 10;
     private int limit = DEFAULT_LIMIT;
 
-    public MostFrequent(Pipe<Map<String, Integer>> inputPipe,
-                        Pipe<List<String>> outputPipe) {
-        super(inputPipe, outputPipe);
+    public MostFrequent() {
+        super();
+    }
+    public MostFrequent(Pipe<List<String>> outputPipe) {
+        super(outputPipe);
 
     }
 
-    public MostFrequent(Pipe<Map<String, Integer>> inputPipe,
-                        Pipe<List<String>> outputPipe,
-                        int limit) {
-        super(inputPipe, outputPipe);
+    public MostFrequent(Pipe<List<String>> outputPipe, int limit) {
+        super(outputPipe);
         if (limit > 0) {
             this.limit = limit;
         } else {
