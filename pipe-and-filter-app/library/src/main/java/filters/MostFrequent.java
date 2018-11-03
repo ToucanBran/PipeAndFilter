@@ -39,13 +39,29 @@ public class MostFrequent extends Filter<Map<String, Integer>, List<String>> {
         if (input == null || input.size() == 0) {
             return output;
         }
-        output = input.entrySet().stream().
+        List<String> ordered = input.entrySet().stream().
                 sorted(Map.Entry.<String, Integer>comparingByValue()
                 .reversed()
                 .thenComparing(Map.Entry.comparingByKey()))
                 .map((e) -> e.getKey())
-                .limit(limit)
                 .collect(Collectors.toList());
+
+        output = ordered.stream().limit(limit).collect(Collectors.toList());
+
+        // Handles cases when we have ties that go beyond the limit. Continues to
+        // add words until tie is over or we add the rest of the items in the ordered
+        // list
+        if (limit < input.size())
+        {
+            int lastWordFreq = input.get(ordered.get(limit - 1));
+            int i = limit;
+            while (i < ordered.size() && input.get(ordered.get(i)) == lastWordFreq)
+            {
+                output.add(ordered.get(i));
+                i++;
+            }
+        }
+
         return output;
     }
 }

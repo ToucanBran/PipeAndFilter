@@ -37,13 +37,71 @@ public class PipeAndFilterTests {
     }
 
     @Test
-    public void removeStopWords_normal_removeWordsSuccess() throws InterruptedException {
+    public void pipeAndFilter_fullPipleline_expectedExtendsBeyondDefinedLimit() throws InterruptedException {
+        final int WORD_LIMIT = 3;
         List<String> words = new ArrayList<String>() {
             {
                 add("This");
                 add("test's");
                 add("2");
                 add("test's");
+                add("test's");
+                add("case");
+                add("case");
+                add("case");
+                add("case");
+                add("case");
+                add("swim");
+                add("swims");
+                add("jump");
+                add("jum'ped");
+                add("jumpi'ng");
+                add("jumps");
+                add("swimming");
+            }
+        };
+
+        for (int i = 0; i < 10; i++) {
+            String stopWord = "a";
+            words.add(stopWord);
+        }
+        List<String> expectedOutput = new ArrayList<String>() {
+            {
+                add("swim");
+                add("case");
+                add("jump");
+                add("test");
+            }
+        };
+
+        Filter[] filters = new Filter[]{
+                new RemoveWords(null, stopWords),
+                new RemoveNonAlphabetical(),
+                new Stem(),
+                new Frequency(),
+                new MostFrequent(WORD_LIMIT)};
+
+        PipeAndFilter paf = new PipeAndFilter(filters);
+
+        Pipe inputPipe = paf.startPipeline();
+        inputPipe.write(words);
+        Thread.sleep(1000);
+        paf.stopPipeline();
+        List<String> output = (List<String>) filters[4].getOutputPipe().read();
+        int outputSize = output.size();
+        output.removeAll(expectedOutput);
+
+        Assert.assertTrue(output.isEmpty() && outputSize > WORD_LIMIT);
+    }
+
+    @Test
+    public void pipeAndFilter_fullPipleline_expectedWitihinDefinedLimit() throws InterruptedException {
+        final int WORD_LIMIT = 3;
+        List<String> words = new ArrayList<String>() {
+            {
+                add("This");
+                add("test's");
+                add("2");
                 add("test's");
                 add("case");
                 add("case");
@@ -77,7 +135,7 @@ public class PipeAndFilterTests {
                 new RemoveNonAlphabetical(),
                 new Stem(),
                 new Frequency(),
-                new MostFrequent(3)};
+                new MostFrequent(WORD_LIMIT)};
 
         PipeAndFilter paf = new PipeAndFilter(filters);
 
@@ -86,8 +144,9 @@ public class PipeAndFilterTests {
         Thread.sleep(1000);
         paf.stopPipeline();
         List<String> output = (List<String>) filters[4].getOutputPipe().read();
+        int outputSize = output.size();
         output.removeAll(expectedOutput);
 
-        Assert.assertTrue(output.isEmpty());
+        Assert.assertTrue(output.isEmpty() && outputSize == WORD_LIMIT);
     }
 }
