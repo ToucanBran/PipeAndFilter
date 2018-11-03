@@ -21,12 +21,8 @@ dependencies {
     oneJarLib files('src/main/resources/stopwords.txt')
 }
 
-task awesomeFunJar(type: OneJar) {
-    mainClass = 'PipeAndFilterMain'
-}
-
 
 task createFatJar(type: OneJar) {
     mainClass = 'PipeAndFilterMain'
-    archiveName = 'myawesomeapp-all.jar'
+    archiveName = 'pipe-and-filter.jar'
 }
