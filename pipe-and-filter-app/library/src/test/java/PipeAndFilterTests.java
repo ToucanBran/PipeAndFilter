@@ -272,8 +272,7 @@ public class PipeAndFilterTests {
         Filter[] filters = new Filter[]{
                 new RemoveWords(4, stopWords),
                 new StringAggregator(4),
-                new RemoveNonAlphabetical(4),
-                new StringAggregator(4),
+                new RemoveNonAlphabetical(),
                 new Stem(),
                 new Frequency(),
                 new MostFrequent()};

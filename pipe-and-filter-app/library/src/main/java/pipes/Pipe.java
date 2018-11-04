@@ -13,14 +13,6 @@ public class Pipe<T> {
 
         queue.add(new PipeInput<>(input));
     }
-    public void write(T input, boolean poisoned) {
-
-        PipeInput<T> pi = new PipeInput<>(input);
-        if (poisoned)
-            pi.poison();
-        queue.add(pi);
-    }
-
     public void write(Pills pill) {
 
         queue.add(new PipeInput<>(pill));

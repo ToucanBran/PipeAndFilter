@@ -31,7 +31,6 @@ public class StringAggregator extends Filter<List<String>, List<String>> {
 
     @Override
     public List<String> process(List<String> input) {
-        // if input is null, no more lists are expected so return aggregate
         if (input == null) {
             return null;
         }

@@ -14,7 +14,6 @@
     <Loggers>
         <Root level="all">
             <AppenderRef ref="STDOUT"/>
-            <AppenderRef ref="MyFile"/>
         </Root>
     </Loggers>
 </Configuration>

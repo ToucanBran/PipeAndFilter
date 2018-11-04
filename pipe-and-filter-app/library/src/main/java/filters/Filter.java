@@ -27,7 +27,7 @@ public abstract class Filter<T,K> implements Runnable{
 
     public void processAndWrite(PipeInput<T> input) {
         K transformedInput = process(input.getInput());
-        outputPipe.write(transformedInput, input.isPoisoned());
+        outputPipe.write(transformedInput);
     }
     public abstract K process(T input);
 
@@ -69,7 +69,6 @@ public abstract class Filter<T,K> implements Runnable{
                     if (!running) {
                         processAndWrite(input);
                         inputPipe.write(Pills.POISON);
-                        outputPipe.write(Pills.POISON);
                     }
                 }
             }

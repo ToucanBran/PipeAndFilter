@@ -37,25 +37,6 @@ public class PipeAndFilter {
         return filters.get(0).getInputPipe();
     }
 
-    public Pipe startPipeline(Filter[] filters) {
-        Pipe inputPipe = new Pipe();
-        executor = Executors.newFixedThreadPool(10);
-        Pipe outputPipe = new Pipe();
-        filters[0].setPipes(inputPipe, outputPipe);
-        inputPipe = outputPipe;
-        executor.execute(filters[0]);
-        executor.execute(filters[0]);
-        executor.execute(filters[0]);
-        for (int i = 1; i < filters.length; i++) {
-            outputPipe = new Pipe();
-            filters[i].setPipes(inputPipe, outputPipe);
-            inputPipe = outputPipe;
-             executor.execute(filters[i]);
-        }
-
-        return filters[0].getInputPipe();
-    }
-
     public Pipe registerFilter(Filter filter, Pipe inputPipe) {
         if (filters == null) {
             filters = new ArrayList<>();
