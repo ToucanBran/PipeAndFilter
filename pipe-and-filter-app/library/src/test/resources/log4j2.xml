@@ -7,13 +7,13 @@
             <PatternLayout pattern="%d %-5p method: [%t] %C{2} (%F:%L) - %m%n"/>
         </Console>
         <File name="MyFile" fileName="logs/app.log">
-                <PatternLayout pattern="%d %-5p method: [%t] %C{2} (%F:%L) - %m%n"/>
+            <PatternLayout pattern="%m%n"/>
         </File>
     </Appenders>
 
     <Loggers>
         <Root level="all">
-            <AppenderRef ref="STDOUT"/>
+            <AppenderRef ref="MyFile"/>
         </Root>
     </Loggers>
 </Configuration>

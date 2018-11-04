@@ -1,6 +1,7 @@
 package filters;
 
 import common.Stemmer;
+import opennlp.tools.stemmer.PorterStemmer;
 import pipes.Pipe;
 
 import java.util.ArrayList;
@@ -9,20 +10,21 @@ import java.util.stream.Collectors;
 
 public class Stem extends Filter<List<String>, List<String>> {
 
-    private Stemmer stemmer;
+    private PorterStemmer stemmer;
 
     public Stem() {
         super();
-        stemmer = new Stemmer();
+     //   stemmer = new PorterStemmer();
     }
 
     public Stem(int threadCount) {
         super(threadCount);
-        stemmer = new Stemmer();
+   //     stemmer = new PorterStemmer();
     }
+
     public Stem(Pipe<List<String>> outputPipe) {
         super(outputPipe);
-        stemmer = new Stemmer();
+   //     stemmer = new PorterStemmer();
     }
 
     @Override
@@ -32,11 +34,14 @@ public class Stem extends Filter<List<String>, List<String>> {
             return null;
         }
         output = input.stream().map(word -> {
-            stemmer.add(word.toCharArray(), word.length());
-            stemmer.stem();
-            return stemmer.toString();
-        }).collect(Collectors.toList());
+//            stemmer.add(word.toCharArray(), word.length());
+//            stemmer.stem();
+            //return new String(stemmer.getResultBuffer(), 0, stemmer.getResultLength());
 
+                String s = new PorterStemmer().stem(word);
+
+            return s;
+        }).collect(Collectors.toList());
         return output;
     }
 

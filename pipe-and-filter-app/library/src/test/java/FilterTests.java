@@ -5,6 +5,8 @@ import org.junit.Assert;
 import org.junit.Test;
 import pipes.Pipe;
 
+import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.*;
 
 import static org.mockito.Mockito.mock;
@@ -65,7 +67,7 @@ public class FilterTests {
                 add("testing");
             }
         };
-        Filter<List<String>, List<String>> stopWordsFilter = new RemoveWords( mock(Pipe.class));
+        Filter<List<String>, List<String>> stopWordsFilter = new RemoveWords(mock(Pipe.class));
         List<String> output = stopWordsFilter.process(input);
         output.removeAll(expectedOutput);
         Assert.assertTrue(output.isEmpty());
@@ -87,18 +89,10 @@ public class FilterTests {
                 add("tests");
             }
         };
-        Filter<List<String>, List<String>> removeNonAlphabeticalFilter = new RemoveNonAlphabetical( mock(Pipe.class));
+        Filter<List<String>, List<String>> removeNonAlphabeticalFilter = new RemoveNonAlphabetical(mock(Pipe.class));
         List<String> output = removeNonAlphabeticalFilter.process(wordsWithNonAlphas);
         output.removeAll(expectedOutput);
         Assert.assertTrue(output.isEmpty());
-    }
-
-    @Test
-    public void removeNonAlphabetical_nullList_returnEmptyList() {
-
-        Filter<List<String>, List<String>> removeNonAlphabeticalFilter = new RemoveNonAlphabetical( mock(Pipe.class));
-        List<String> output = removeNonAlphabeticalFilter.process(null);
-        Assert.assertTrue(output != null && output.isEmpty());
     }
 
     @Test
@@ -116,7 +110,7 @@ public class FilterTests {
                 add("world");
             }
         };
-        Filter<List<String>, List<String>> removeNonAlphabeticalFilter = new RemoveNonAlphabetical( mock(Pipe.class));
+        Filter<List<String>, List<String>> removeNonAlphabeticalFilter = new RemoveNonAlphabetical(mock(Pipe.class));
         List<String> output = removeNonAlphabeticalFilter.process(wordsWithNonAlphas);
         output.removeAll(expectedOutput);
         Assert.assertTrue(output.isEmpty());
@@ -141,7 +135,7 @@ public class FilterTests {
                 add("jump");
             }
         };
-        Filter<List<String>, List<String>> stemFilter = new Stem( mock(Pipe.class));
+        Filter<List<String>, List<String>> stemFilter = new Stem(mock(Pipe.class));
         List<String> output = stemFilter.process(words);
         output.removeAll(expectedOutput);
         Assert.assertTrue(output.isEmpty());
@@ -158,7 +152,7 @@ public class FilterTests {
             }
         };
 
-        Filter<List<Object>, Map<Object, Integer>> frequencyFilter = new Frequency( mock(Pipe.class));
+        Filter<List<Object>, Map<Object, Integer>> frequencyFilter = new Frequency(mock(Pipe.class));
         Map<Object, Integer> output = frequencyFilter.process(words);
         Assert.assertTrue(output.size() == 1 && output.get("jump") == 4);
     }
@@ -181,14 +175,14 @@ public class FilterTests {
             }
         };
 
-        Filter<List<Object>, Map<Object, Integer>> frequencyFilter = new Frequency( mock(Pipe.class));
+        Filter<List<Object>, Map<Object, Integer>> frequencyFilter = new Frequency(mock(Pipe.class));
         Map<Object, Integer> output = frequencyFilter.process(words);
         Assert.assertTrue(output.size() == 4 && output.get("jump") == 2
-                            && output.get(1) == 2 && output.get(setOne) == 2
-                            && output.get(setTwo) == 1);
+                && output.get(1) == 2 && output.get(setOne) == 2
+                && output.get(setTwo) == 1);
     }
 
-    @Test(timeout=1000)
+    @Test(timeout = 1000)
     public void frequency_stressTest_success() {
         Set setOne = new HashSet();
         setOne.add("test");
@@ -199,7 +193,7 @@ public class FilterTests {
             words.add(setOne);
         }
 
-        Filter<List<Object>, Map<Object, Integer>> frequencyFilter = new Frequency( mock(Pipe.class));
+        Filter<List<Object>, Map<Object, Integer>> frequencyFilter = new Frequency(mock(Pipe.class));
         frequencyFilter.process(words);
     }
 
@@ -210,17 +204,17 @@ public class FilterTests {
         frequency.put("Foo", 13);
         frequency.put("Bar", 13);
         frequency.put("jumps", 11);
-        frequency.put("jumping",22);
+        frequency.put("jumping", 22);
         frequency.put("jumped", 6);
         frequency.put("jump", 2);
         frequency.put("world", 1);
-        frequency.put("I",32);
+        frequency.put("I", 32);
         frequency.put("am", 40);
         frequency.put("testing", 12);
 
         String[] expectedOrder = new String[]{"am", "I", "jumping", "Bar", "Foo", "testing",
-                "jumps", "Hello","jumped", "jump"};
-        Filter<Map<String, Integer>, List<String>> mostFrequentWordsFilter = new MostFrequent( mock(Pipe.class));
+                "jumps", "Hello", "jumped", "jump"};
+        Filter<Map<String, Integer>, List<String>> mostFrequentWordsFilter = new MostFrequent(mock(Pipe.class));
 
         String[] output = mostFrequentWordsFilter.process(frequency).toArray(new String[0]);
         Assert.assertTrue(output.length == expectedOrder.length);
@@ -236,16 +230,16 @@ public class FilterTests {
         frequency.put("Foo", 13);
         frequency.put("Bar", 13);
         frequency.put("jumps", 11);
-        frequency.put("jumping",22);
+        frequency.put("jumping", 22);
         frequency.put("jumped", 6);
         frequency.put("jump", 2);
         frequency.put("world", 1);
-        frequency.put("I",32);
+        frequency.put("I", 32);
         frequency.put("am", 40);
         frequency.put("testing", 12);
 
         Filter<Map<String, Integer>, List<String>> mostFrequentWordsFilter =
-                        new MostFrequent(mock(Pipe.class), 11);
+                new MostFrequent(mock(Pipe.class), 11);
 
         String[] output = mostFrequentWordsFilter.process(frequency).toArray(new String[0]);
         Assert.assertTrue(output.length == 11);
@@ -267,7 +261,7 @@ public class FilterTests {
             }
         };
 
-        List<String> expectedOutput =  new ArrayList<String>() {
+        List<String> expectedOutput = new ArrayList<String>() {
             {
                 add("jumps");
                 add("jump");
@@ -275,12 +269,11 @@ public class FilterTests {
                 add("ran");
             }
         };
-        Filter<List<String>, List<String>> aggregator = new StringAggregator();
+        Filter<List<String>, List<String>> aggregator = new StringAggregator(2);
 
 
         aggregator.process(words1);
-        aggregator.process(words2);
-        List<String> output = aggregator.process(null);
+        List<String> output = aggregator.process(words2);
         output.removeAll(expectedOutput);
         Assert.assertTrue(output.size() == 0);
     }

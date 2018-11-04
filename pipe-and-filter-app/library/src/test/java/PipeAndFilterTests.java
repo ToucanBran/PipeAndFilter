@@ -245,7 +245,7 @@ public class PipeAndFilterTests {
 
         Filter[] filters = new Filter[]{
                 new RemoveWords(null, stopWords),
-                new StringAggregator()
+                new StringAggregator(2)
         };
 
         PipeAndFilter paf = new PipeAndFilter(filters);
@@ -253,7 +253,6 @@ public class PipeAndFilterTests {
         Pipe inputPipe = paf.startPipeline();
         inputPipe.write(words);
         inputPipe.write(words2);
-        inputPipe.write(Pills.POISON);
         PipeInput outputPipe = filters[1].getOutputPipe().read();
         while (outputPipe == null || outputPipe.getInput() == null) {
             outputPipe = filters[1].getOutputPipe().read();
@@ -267,15 +266,16 @@ public class PipeAndFilterTests {
     public void DELETE() throws InterruptedException {
 
         List<String> kjvWords = getWords(PipeAndFilterTests.class.getResourceAsStream("/kjbible.txt"));
-        List<List<String>> splitWords = Lists.partition(kjvWords, kjvWords.size() / 3);
+        List<List<String>> splitWords = Lists.partition(kjvWords, kjvWords.size() / 20);
         long start = System.currentTimeMillis();
         Filter[] filters = new Filter[]{
-                new RemoveWords(4, stopWords),
-                new StringAggregator(4),
+                new RemoveWords(splitWords.size(), stopWords),
+                new StringAggregator(splitWords.size()),
                 new RemoveNonAlphabetical(),
                 new Stem(),
                 new Frequency(),
                 new MostFrequent()};
+
         PipeAndFilter paf = new PipeAndFilter(filters);
         Pipe inputPipe = paf.startPipeline();
         splitWords.forEach(list -> {

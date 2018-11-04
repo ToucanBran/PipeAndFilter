@@ -62,7 +62,8 @@ public abstract class Filter<T,K> implements Runnable{
                     long start = System.currentTimeMillis();
                     processAndWrite(input);
                     long finish = System.currentTimeMillis();
-                    logger.info(String.format("Filter took %d milliseconds", finish - start));
+                    if (input.getInput() != null)
+                        logger.info(String.format("%s-%d", this.toString(), finish - start));
                 }
                 else {
                     running = processPoison();
@@ -73,7 +74,6 @@ public abstract class Filter<T,K> implements Runnable{
                 }
             }
         }
-        logger.info(String.format("%s no longer running", this.toString()));
     }
 
 
