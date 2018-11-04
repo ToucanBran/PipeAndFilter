@@ -10,3 +10,4 @@ out/
 /pipe-and-filter-app/.gradle
 build/
 .gradle
+/pipe-and-filter-app/library/logs/
