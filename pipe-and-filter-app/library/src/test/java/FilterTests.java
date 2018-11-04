@@ -1,3 +1,5 @@
+import common.PipeInput;
+import common.enums.Pills;
 import filters.*;
 import org.junit.Assert;
 import org.junit.Test;
@@ -247,5 +249,39 @@ public class FilterTests {
 
         String[] output = mostFrequentWordsFilter.process(frequency).toArray(new String[0]);
         Assert.assertTrue(output.length == 11);
+    }
+
+    @Test
+    public void stringAggregator_normal_success() {
+        List<String> words1 = new ArrayList<String>() {
+            {
+                add("jumps");
+                add("jump");
+            }
+        };
+
+        List<String> words2 = new ArrayList<String>() {
+            {
+                add("run");
+                add("ran");
+            }
+        };
+
+        List<String> expectedOutput =  new ArrayList<String>() {
+            {
+                add("jumps");
+                add("jump");
+                add("run");
+                add("ran");
+            }
+        };
+        Filter<List<String>, List<String>> aggregator = new StringAggregator();
+
+
+        aggregator.process(words1);
+        aggregator.process(words2);
+        List<String> output = aggregator.process(null);
+        output.removeAll(expectedOutput);
+        Assert.assertTrue(output.size() == 0);
     }
 }

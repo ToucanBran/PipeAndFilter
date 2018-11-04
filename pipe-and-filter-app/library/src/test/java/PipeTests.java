@@ -8,7 +8,7 @@ public class PipeTests {
     public void Pipe_normal_readAndWriteSuccess() {
         Pipe pipe = new Pipe();
         pipe.write("input");
-        Assert.assertTrue(pipe.read().equals("input"));
+        Assert.assertTrue(pipe.read().getInput().equals("input"));
     }
 
     @Test

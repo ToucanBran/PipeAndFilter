@@ -15,7 +15,7 @@ public class MostFrequent extends Filter<Map<String, Integer>, List<String>> {
     public MostFrequent() {
         super();
     }
-    public MostFrequent(int limit) {
+    public MostFrequent(int threads, int limit) {
         this.limit = limit;
     }
     public MostFrequent(Pipe<List<String>> outputPipe) {
@@ -36,8 +36,8 @@ public class MostFrequent extends Filter<Map<String, Integer>, List<String>> {
     @Override
     public List<String> process(Map<String, Integer> input) {
         List<String> output = new ArrayList<>();
-        if (input == null || input.size() == 0) {
-            return output;
+        if (input == null) {
+            return null;
         }
         List<String> ordered = input.entrySet().stream().
                 sorted(Map.Entry.<String, Integer>comparingByValue()
@@ -63,5 +63,16 @@ public class MostFrequent extends Filter<Map<String, Integer>, List<String>> {
         }
 
         return output;
+    }
+
+    @Override
+    public boolean processPoison() {
+        return false;
+    }
+
+
+    @Override
+    public String toString() {
+        return "MF";
     }
 }
